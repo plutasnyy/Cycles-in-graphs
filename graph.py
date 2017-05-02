@@ -4,24 +4,14 @@ class graph(object):
 
     def find_non_empty_index(self):
         x,y=0,0
-        counter=1
+        x_counter,y_counter=1,1
         temp=self.number_of_vertices
-        while (self.matrix[x][y]==0 or counter<=1):
+        while (self.matrix[x][y]==0 or x_counter<=1 or y_counter<=1):
             x,y=randint(1,temp),randint(1,temp)
-            counter=self.matrix[x].count(1)
+            x_counter=self.matrix[x].count(1)
+            y_counter=self.matrix[y].count(1)
         return x,y
-    def __init__(self,number_of_vertices,density):
-
-        #minimalna gestosc wynika ze wzoru n*(n-1)/2*d>=n-1
-        #czyli d>=2/n
-
-        if density<200/number_of_vertices:
-            density=200/number_of_vertices
-
-        self.matrix=[]
-        self.number_of_vertices=int(number_of_vertices)
-        full_count_edges=number_of_vertices*(number_of_vertices-1)/2
-
+    def create_full_graph(self):
         for i in range(0,self.number_of_vertices+1):
             X=[]
             for j in range(0,self.number_of_vertices+1):
@@ -30,10 +20,23 @@ class graph(object):
                 else:
                     X.append(1)
             self.matrix.append(X)
-
+    def delete_edges(self,density):
+        full_count_edges=self.number_of_vertices*(self.number_of_vertices-1)/2
         for i in range(int(full_count_edges*(100-density)/100)):
             x,y=self.find_non_empty_index()
             self.matrix[x][y]=self.matrix[y][x]=0
+    def __init__(self,number_of_vertices,density):
+        #minimum destinity -> n*(n-1)/2*d>=n-1
+        #is equal to d>=2/n
+
+        if density<200/number_of_vertices:
+            density=200/number_of_vertices
+
+        self.matrix=[]
+        self.number_of_vertices=int(number_of_vertices)
+
+        self.create_full_graph()
+        self.delete_edges(density)
 
     def print_neighbours_list(self):
         for i in range(1,self.number_of_vertices+1):
@@ -52,7 +55,6 @@ class graph(object):
         else:
             print("Graf nie jest spojny")
             return False
-
     def check_euler(self):
         euler=True
         if self.check_connectivity()==False:
@@ -69,3 +71,22 @@ class graph(object):
             else:
                 print("Graf nie ma cyklu Eulera")
                 return False
+
+    def find_hamilton_path(self,vertice,visited=None):
+        if visited==None:
+            visited=[]
+        visited.append(vertice)
+        if len(visited)==self.number_of_vertices:
+            print(visited)
+            self.hamilton_path.append(visited)
+
+        for i in range(1,self.number_of_vertices+1):
+            if self.matrix[vertice][i]==1 and i not in visited:
+                self.find_hamilton_path(i,visited)
+        visited.pop()
+
+    def hamilton(self):
+        self.hamilton_path=[]
+        for i in range(1,self.number_of_vertices+1):
+            self.find_hamilton_path(i)
+        print(self.hamilton_path)
