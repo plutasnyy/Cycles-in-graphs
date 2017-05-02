@@ -81,9 +81,24 @@ class graph(object):
             if self.matrix[vertice][i]==1 and i not in visited:
                 self.find_hamilton_path(i,visited)
         visited.pop()
-
+    def copy_no_cycle_path(self):
+        for i in self.hamilton_path:
+            if self.matrix[i[0]][i[-1]]==1:
+                self.hamilton_cycles.append(list(i))
+    def delete_reverse_list(self):
+        for i in self.hamilton_cycles:
+            if i[::-1] in self.hamilton_cycles:
+                self.hamilton_cycles.remove(i[::-1])
+    def print_cycles(self):
+        for i in self.hamilton_cycles:
+            print(i)
     def hamilton(self):
         self.hamilton_path=[]
+        self.hamilton_cycles=[]
+
         for i in range(1,self.number_of_vertices+1):
             self.find_hamilton_path(i)
-        print(self.hamilton_path)
+
+        self.copy_no_cycle_path()
+        self.delete_reverse_list()
+        self.print_cycles()
