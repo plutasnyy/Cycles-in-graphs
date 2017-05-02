@@ -72,33 +72,40 @@ class graph(object):
                 print("Graf nie ma cyklu Eulera")
                 return False
 
-    def find_hamilton_path(self,vertice,visited=[]):
-        visited.append(vertice)
-        if len(visited)==self.number_of_vertices:
-            self.hamilton_path.append(list(visited)) # list() copy the array, without it doesn`t work
+    def delete_reverse_list(self,temp_list):
+        for i in temp_list:
+            if i[::-1] in temp_list:
+                temp_list.remove(i[::-1])
+    def print_list(self,temp_list):
+        if len(temp_list)==0:
+            print("Brak sciezki hamiltona")
+        else:
+            print("Sciezki hamiltona:")
+            for i in temp_list:
+                print(i)
 
-        for i in range(1,self.number_of_vertices+1):
-            if self.matrix[vertice][i]==1 and i not in visited:
-                self.find_hamilton_path(i,visited)
-        visited.pop()
+    def find_hamilton_path(self,vertice,visited=[],one_path=False):
+        if one_path==False or self.capture_hamilton==False:
+            visited.append(vertice)
+            if len(visited)==self.number_of_vertices:
+                self.hamilton_path.append(list(visited)) # list() copy the array, without it doesn`t work
+                self.capture_hamilton=True
+            for i in range(1,self.number_of_vertices+1):
+                if self.matrix[vertice][i]==1 and i not in visited:
+                    self.find_hamilton_path(i,visited,one_path)
+            visited.pop()
     def copy_no_cycle_path(self):
         for i in self.hamilton_path:
             if self.matrix[i[0]][i[-1]]==1:
                 self.hamilton_cycles.append(list(i))
-    def delete_reverse_list(self):
-        for i in self.hamilton_cycles:
-            if i[::-1] in self.hamilton_cycles:
-                self.hamilton_cycles.remove(i[::-1])
-    def print_cycles(self):
-        for i in self.hamilton_cycles:
-            print(i)
-    def hamilton(self):
+    def hamilton(self,one_path=False):
+        self.capture_hamilton=False
         self.hamilton_path=[]
         self.hamilton_cycles=[]
 
         for i in range(1,self.number_of_vertices+1):
-            self.find_hamilton_path(i)
+            self.find_hamilton_path(i,[],one_path)
 
         self.copy_no_cycle_path()
-        self.delete_reverse_list()
-        self.print_cycles()
+        self.delete_reverse_list(self.hamilton_cycles)
+        self.print_list(self.hamilton_cycles)
