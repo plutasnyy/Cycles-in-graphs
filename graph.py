@@ -72,13 +72,10 @@ class graph(object):
                 print("Graf nie ma cyklu Eulera")
                 return False
 
-    def find_hamilton_path(self,vertice,visited=None):
-        if visited==None:
-            visited=[]
+    def find_hamilton_path(self,vertice,visited=[]):
         visited.append(vertice)
         if len(visited)==self.number_of_vertices:
-            print(visited)
-            self.hamilton_path.append(visited)
+            self.hamilton_path.append(list(visited)) # list() copy the array, without it doesn`t work
 
         for i in range(1,self.number_of_vertices+1):
             if self.matrix[vertice][i]==1 and i not in visited:
