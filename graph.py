@@ -1,5 +1,4 @@
 from random import randint
-from itertools import permutations
 class graph(object):
 
     def find_non_empty_index(self):
@@ -99,13 +98,16 @@ class graph(object):
             if self.matrix[i[0]][i[-1]]==1:
                 self.hamilton_cycles.append(list(i))
     def hamilton(self,one_path=False):
-        self.capture_hamilton=False
-        self.hamilton_path=[]
-        self.hamilton_cycles=[]
+        if check_connectivity==True:
+            self.capture_hamilton=False
+            self.hamilton_path=[]
+            self.hamilton_cycles=[]
 
-        for i in range(1,self.number_of_vertices+1):
-            self.find_hamilton_path(i,[],one_path)
+            for i in range(1,self.number_of_vertices+1):
+                self.find_hamilton_path(i,[],one_path)
 
-        self.copy_no_cycle_path()
-        self.delete_reverse_list(self.hamilton_cycles)
-        self.print_list(self.hamilton_cycles)
+            self.copy_no_cycle_path()
+            self.delete_reverse_list(self.hamilton_cycles)
+            self.print_list(self.hamilton_cycles)
+        else:
+            print("Brak cyklu Hamiltona")
