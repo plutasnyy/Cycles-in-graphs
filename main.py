@@ -1,8 +1,11 @@
 from graph import graph
 
 
-graph=graph(5,70)
+
+grap=graph(5,50)
+graph.__del__()
 graph.print_neighbours_list()
 #graph.check_euler()
 
-graph.hamilton()
+#graph.hamilton()
+graph.euler()
