@@ -38,7 +38,8 @@ class graph(object):
         self.create_full_graph()
         self.delete_edges(density)
 
-        self.number_of_edges=self.number_of_vertices*(self.number_of_vertices-1)/2*density/100
+        self.number_of_edges=number_of_vertices*(number_of_vertices-1)/2
+        self.number_of_edges*=density/100
 
     def print_neighbours_list(self):
         for i in range(1,self.number_of_vertices+1):
