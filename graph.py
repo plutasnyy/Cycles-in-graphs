@@ -25,6 +25,11 @@ class graph(object):
         for i in range(int(full_count_edges*(100-density)/100)):
             x,y=self.find_non_empty_index()
             self.matrix[x][y]=self.matrix[y][x]=0
+    def count_edge(self):
+        temp=0
+        for i in self.matrix:
+            temp+=i.count(1)
+        return temp/2
     def __init__(self,number_of_vertices,density):
         #minimum destinity -> n*(n-1)/2*d>=n-1
         #is equal to d>=2/n
@@ -38,8 +43,7 @@ class graph(object):
         self.create_full_graph()
         self.delete_edges(density)
 
-        self.number_of_edges=number_of_vertices*(number_of_vertices-1)/2
-        self.number_of_edges*=density/100
+        self.number_of_edges=self.count_edge()
 
     def print_neighbours_list(self):
         for i in range(1,self.number_of_vertices+1):
@@ -100,7 +104,6 @@ class graph(object):
             visited.pop()
     def hamilton(self,one_path=False):
         if self.check_connectivity()==True:
-            print("Znalezone cykle Hamiltona: ")
             self.capture_hamilton=False
             self.hamilton_path=[]
             self.hamilton_cycles=[]
@@ -110,14 +113,16 @@ class graph(object):
 
             self.hamilton_cycles=self.copy_cycle_path(self.hamilton_path,hamilton=1)
             self.delete_reverse_list(self.hamilton_cycles)
-            self.print_list(self.hamilton_cycles)
-        else:
-            print("Brak cyklu Hamiltona")
+
+            if len(self.hamilton_cycles)>0:
+                print("Znalezone cykle Hamiltona: ")
+                self.print_list(self.hamilton_cycles)
 
     def find_euler_path(self,matrix,vertice,visited=[],one_path=False):
         if one_path==False or self.capture_euler==False:
             if len(visited)>=1:
-                matrix[vertice][visited[-1]]=matrix[visited[-1]][vertice]=0
+                matrix[vertice][visited[-1]]=0
+                matrix[visited[-1]][vertice]=0
             visited.append(vertice)
             if len(visited)==self.number_of_edges+1:
                 self.euler_paths.append(list(visited))
@@ -128,7 +133,6 @@ class graph(object):
             visited.pop()
     def euler(self,one_path=False):
         if self.check_euler()==True:
-            print("Znalezione cykle Eulera: ")
             self.capture_euler=False
             self.euler_paths=[]
             self.euler_cycles=[]
@@ -136,6 +140,7 @@ class graph(object):
             for i in range(1,self.number_of_vertices+1):
                 self.find_euler_path(copy.deepcopy(self.matrix),i,[],one_path)
 
+            print("Znalezione cykle Eulera: ")
             self.euler_cycles=self.copy_cycle_path(self.euler_paths,hamilton=0)
             self.delete_reverse_list(self.euler_cycles)
             self.print_list(self.euler_cycles)
