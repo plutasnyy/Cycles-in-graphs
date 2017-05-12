@@ -88,19 +88,18 @@ class graph(object):
             if len(visited)==self.number_of_vertices:
                 if self.matrix[visited[0]][visited[-1]]==1:
                     visited.append(visited[0])
-                    self.hamilton_cycle.append(list(visited)) # list() copy the array, without it doesn`t work
+                    self.hamilton_cycle.append(copy.deepcopy(visited)) # list() copy the array, without it doesn`t work
                     self.capture_hamilton=True
             for i in range(1,self.number_of_vertices+1):
                 if self.matrix[vertice][i]==1 and i not in visited:
-                    self.find_hamilton_cycle(i,visited,one_path)
+                    self.find_hamilton_cycle(i,copy.deepcopy(visited),one_path)
             visited.pop()
     def hamilton(self,one_path=False):
         if self.check_connectivity()==True:
             self.capture_hamilton=False
             self.hamilton_cycle=[]
 
-            for i in range(1,self.number_of_vertices+1):
-                self.find_hamilton_cycle(i,[],one_path)
+            self.find_hamilton_cycle(1,[],one_path)
 
             self.delete_reverse_list(self.hamilton_cycle)
 
@@ -122,13 +121,12 @@ class graph(object):
                     self.find_euler_cycle(copy.deepcopy(matrix),i,visited,one_path)
             visited.pop()
     def euler(self,one_path=False):
-        if self.check_euler()==True:
-            self.capture_euler=False
-            self.euler_cycle=[]
+        #if self.check_euler()==True:
+        self.capture_euler=False
+        self.euler_cycle=[]
 
-            for i in range(1,self.number_of_vertices+1):
-                self.find_euler_cycle(copy.deepcopy(self.matrix),i,[],one_path)
+        self.find_euler_cycle(copy.deepcopy(self.matrix),1,[],one_path)
 
-            print("Znalezione cykle Eulera: ")
-            self.delete_reverse_list(self.euler_cycle)
-            self.print_list(self.euler_cycle)
+        print("Znalezione cykle Eulera: ")
+        self.delete_reverse_list(self.euler_cycle)
+        self.print_list(self.euler_cycle)
