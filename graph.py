@@ -50,30 +50,6 @@ class graph(object):
             X=[x for x in range(len(self.matrix[i])) if self.matrix[i][x]]
             print(i,X)
 
-    def check_connectivity(self):
-        connected=True
-        for i in range(1,self.number_of_vertices+1):
-            if self.matrix[i].count(1)==0:
-                connected=False
-                break
-        if connected==True:
-            return True
-        else:
-            return False
-    def check_euler(self):
-        euler=True
-        if self.check_connectivity()==False:
-            return False
-        else:
-            for i in range(1,self.number_of_vertices+1):
-                if self.matrix[i].count(1)%2==1:
-                    euler=False
-                    break
-            if euler:
-                return True
-            else:
-                return False
-
     def delete_reverse_list(self,temp_list):
         for i in temp_list:
             if i[::-1] in temp_list:
@@ -95,17 +71,16 @@ class graph(object):
                     self.find_hamilton_cycle(i,copy.deepcopy(visited),one_path)
             visited.pop()
     def hamilton(self,one_path=False):
-        if self.check_connectivity()==True:
-            self.capture_hamilton=False
-            self.hamilton_cycle=[]
+        self.capture_hamilton=False
+        self.hamilton_cycle=[]
 
-            self.find_hamilton_cycle(1,[],one_path)
+        self.find_hamilton_cycle(1,[],one_path)
 
-            self.delete_reverse_list(self.hamilton_cycle)
+        self.delete_reverse_list(self.hamilton_cycle)
 
-            if len(self.hamilton_cycle)>0:
-                print("Znalezone cykle Hamiltona: ")
-                self.print_list(self.hamilton_cycle)
+        if len(self.hamilton_cycle)>0:
+            print("Znalezone cykle Hamiltona: ")
+            self.print_list(self.hamilton_cycle)
 
     def find_euler_cycle(self,matrix,vertice,visited=[],one_path=False):
         if one_path==False or self.capture_euler==False:
@@ -121,7 +96,6 @@ class graph(object):
                     self.find_euler_cycle(copy.deepcopy(matrix),i,visited,one_path)
             visited.pop()
     def euler(self,one_path=False):
-        #if self.check_euler()==True:
         self.capture_euler=False
         self.euler_cycle=[]
 
