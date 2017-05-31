@@ -101,6 +101,8 @@ class graph(object):
 
         self.find_euler_cycle(copy.deepcopy(self.matrix),1,[],one_path)
 
-        print("Znalezione cykle Eulera: ")
+
         self.delete_reverse_list(self.euler_cycle)
-        self.print_list(self.euler_cycle)
+        if len(self.euler_cycle)>0:
+            print("Znalezione cykle Eulera: ")
+            self.print_list(self.euler_cycle)

@@ -1,7 +1,7 @@
 from graph import graph
 import time
 
-graph=graph(12,0)
+graph=graph(4,60)
 graph.print_neighbours_list()
 
 start=time.time()
